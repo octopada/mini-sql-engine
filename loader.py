@@ -23,7 +23,6 @@ class Loader:
 	@classmethod
 	def initialize_database(cls):
 
-		table_count = -1
 		line_is_table = False
 		line_is_column = False
 
@@ -48,7 +47,6 @@ class Loader:
 
 			if line_is_table:
 
-				table_count += 1
 				cls.table_name = line.strip()
 
 				line_is_table = False
@@ -70,7 +68,7 @@ class Loader:
 			tabledata_rows = tabledata.readlines()
 
 			for row in tabledata_rows:
-				
+
 				data = row.strip()
 				data = data.split(',')
 				cls.database.insert_values(table_name, data)
