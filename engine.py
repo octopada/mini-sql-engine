@@ -1,4 +1,5 @@
 import sqlparse
+from sqlparse import tokens
 from loader import Loader
 
 if __name__ == '__main__':
@@ -7,11 +8,24 @@ if __name__ == '__main__':
 
 	query = ''
 	while(query != 'Quit'):
-		
-		query = raw_input('> ')
-		parsed = sqlparse.parse(query)
-		print parsed
 
+		query = raw_input('> ')
+
+		parsed_query = sqlparse.parse(query)
+		query_tokens = parsed_query[0].tokens
+
+		if query_tokens[0].match(tokens.DML, 'SELECT'):
+
+			if query_tokens[2].match(tokens.Wildcard, '*', regex = False):
+
+				print 'select all'
+
+			else:
+
+				cols = str(query_tokens[2].value)
+				print 'select', cols
+
+				
 	# TESTING
 	tables = database.get_tables()
 
