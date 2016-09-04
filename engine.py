@@ -1,53 +1,17 @@
-import sqlparse
-from sqlparse import tokens
 from loader import Loader
+from parser import parse
+
+database = Loader.get_database()
 
 if __name__ == '__main__':
-
-	database = Loader.get_database()
 
 	query = ''
 	while(query != 'Quit'):
 
 		query = raw_input('> ')
 
-		parsed_query = sqlparse.parse(query)
-		query_tokens = parsed_query[0].tokens
-
-		if query_tokens[0].match(tokens.DML, 'SELECT'):
-
-			if query_tokens[2].match(tokens.Wildcard, '*', regex = False):
-
-				print 'select all'
-
-			elif query_tokens[2].match(None, '.*', regex = True):
-
-				cols = str(query_tokens[2].value)
-				print 'select', cols
-
-			else:
-
-				print 'error'
-
-			if not query_tokens[4].match(
-					tokens.Keyword, 'FROM', regex = False):
-
-				print 'error'
-
-			if query_tokens[6].match(None, '.*', regex = True):
-
-				tables = str(query_tokens[6].value)
-				print 'from', tables
-
-			else:
-
-				print 'error'
-
-		else:
-
-			print 'error'
-
-				
+		parse(query)
+			
 	# TESTING
 	tables = database.get_tables()
 
