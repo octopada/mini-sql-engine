@@ -1,13 +1,16 @@
 class Database:
 
 	def __init__(self):
+
 		self.tables = []
 		self.tables_index = {}
 
 	def create_table(self, table_name, column_names):
 
 		table = Table(table_name)
+		
 		for col in column_names:
+
 			table.add_column(col)
 
 		self.tables_index[table_name] = len(self.tables)
@@ -21,6 +24,7 @@ class Database:
 		table.insert_values(row_data)
 
 	def get_tables(self):
+
 		tables = self.tables[:]
 		return tables
 
