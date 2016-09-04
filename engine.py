@@ -33,5 +33,5 @@ if __name__ == '__main__':
 		print tables[i].name, "has columns:"
 		for j in range(len(tables[i].columns)):
 			print tables[i].columns[j].name, "has values:"
-			for k in range(len(tables[i].columns[j].values)):
-				print tables[i].columns[j].values[k]
+			for k in range(len(tables[i].columns[j].cells)):
+				print tables[i].columns[j].cells[k]
