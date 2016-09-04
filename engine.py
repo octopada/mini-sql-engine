@@ -7,6 +7,7 @@ if __name__ == '__main__':
 
 	query = ''
 	while(query != 'Quit'):
+		
 		query = raw_input('> ')
 		parsed = sqlparse.parse(query)
 		print parsed
