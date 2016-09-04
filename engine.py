@@ -20,10 +20,32 @@ if __name__ == '__main__':
 
 				print 'select all'
 
-			else:
+			elif query_tokens[2].match(None, '.*', regex = True):
 
 				cols = str(query_tokens[2].value)
 				print 'select', cols
+
+			else:
+
+				print 'error'
+
+			if not query_tokens[4].match(
+					tokens.Keyword, 'FROM', regex = False):
+
+				print 'error'
+
+			if query_tokens[6].match(None, '.*', regex = True):
+
+				tables = str(query_tokens[6].value)
+				print 'from', tables
+
+			else:
+
+				print 'error'
+
+		else:
+
+			print 'error'
 
 				
 	# TESTING
