@@ -1,13 +1,10 @@
 import sqlparse
 from sqlparse import tokens
-from database import Database, Table
 
 class Parser:
 
 	@classmethod
 	def process_query(cls, query, database):
-
-		cls.database = database
 
 		parsed_query = sqlparse.parse(query)
 		query_tokens = parsed_query[0].tokens
@@ -87,7 +84,6 @@ class Parser:
 
 				where_clause_string = where_clause.value
 				where_clause_list = Parser.get_list_from_string(where_clause_string, ' ')
-				print where_clause_list
 				statement_data['where_clause'] = where_clause_list[1:]
 
 		except IndexError:
