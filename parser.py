@@ -38,7 +38,7 @@ class Parser:
 	def parse_select(cls, query_tokens):
 
 		token_it = 0
-		statement_data = {'command': 'SELECT'}
+		statement_data = {'command': 'SELECT', 'has_where': False, 'has_function': False}
 
 		try:
 
@@ -71,6 +71,8 @@ class Parser:
 		table_id_list = Parser.get_list_from_string(table_id_string, ',')
 		statement_data['table_ids'] = table_id_list
 
+		statement_data = Parser.check_functions(statement_data)
+
 		backup_token_it = token_it
 		try:
 
@@ -82,6 +84,7 @@ class Parser:
 
 			else:
 
+				statement_data['has_where'] = True
 				where_clause_string = where_clause.value
 				where_clause_list = Parser.get_list_from_string(where_clause_string, ' ')
 				statement_data['where_clause'] = where_clause_list[1:]
@@ -114,63 +117,30 @@ class Parser:
 		return token, token_it
 
 
-# def join(table_ind, tables, row_data, all_rows):
+	@staticmethod
+	def check_functions(statement_data):
 
-# 	if table_ind == len(tables):
+		column_id_list = statement_data['column_ids']
 
-# 		all_rows.append(row_data)
+		try:
 
-# 	else:
+			function, column = column_id_list[0].split('(')
+			column = column.split(')')
+			column = column[0]
+			column_id_list[0] = column
 
-# 		table = tables[table_ind]
+			if function == 'distinct':
 
-# 		for row in table.get_rows():
+				statement_data['distinct'] = True
 
-# 			new_row = row_data + row.get_row_data()
-# 			join(table_ind + 1, tables, new_row, all_rows)
+			else:
 
+				statement_data['has_function'] = True
+				statement_data['function'] = function
+				statement_data['function_column'] = column
 
-# def process_tables(tables):
+		except ValueError:
 
-# 	if not tables.match(None, '.*', regex = True):
+			return statement_data
 
-# 		raise ValueError('Invalid Tables')
-
-# 	table_names = str(tables.value)
-# 	tables_list = table_names.split(',')
-
-# 	stripped_tables_list = []
-# 	for table_name in tables_list:
-
-# 		stripped_tables_list.append(table_name.strip())
-
-# 	joined_table = Table('joined_table')
-
-# 	tables = [database.get_table_by_name(table_name) for table_name in stripped_tables_list]
-
-# 	for table in tables: # join columns
-
-# 		for col in table.get_columns():
-
-# 			joined_table.add_column(table.get_name() + '.' + col.get_name())
-
-# 	all_rows = []
-# 	join(0, tables, [], all_rows) # generate rows
-
-# 	for row in all_rows:
-
-# 		joined_table.insert_values(row) # insert rows
-
-# 	return joined_table
-	
-
-# def process_columns(columns, joined_table):
-
-# 	selected_columns = []
-# 	if columns.match(tokens.Wildcard, '*'):
-
-# 		for col in joined_table.get_columns():
-
-# 			selected_columns.append(col.get_name())
-
-# 	return selected_columns
+		return statement_data

@@ -92,6 +92,17 @@ class Table:
 
 		return self.rows
 
+	def get_column_by_name(self, column_name):
+
+		try:
+
+			column_i = self.columns_index[column_name]
+			return self.columns[column_i]
+
+		except KeyError:
+
+			raise KeyError('Column: "%s" does not exist' % (column_name))
+
 
 class Row:
 
@@ -119,6 +130,10 @@ class Row:
 
 		return [cell.get_value() for cell in self.cells]
 
+	def get_cells(self):
+
+		return self.cells
+
 
 class Column:
 
@@ -145,6 +160,14 @@ class Column:
 
 		return self.name
 
+	def get_cell_by_index(self, index):
+
+		return self.cells[index]
+
+	def get_cells(self):
+
+		return self.cells
+
 
 class Cell:
 
@@ -161,3 +184,7 @@ class Cell:
 	def get_value(self):
 
 		return self.value
+
+	def get_column(self):
+
+		return self.column
