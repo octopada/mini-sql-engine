@@ -48,6 +48,7 @@ class Database:
 
 			raise KeyError('Table: "%s" does not exist' % (table_name))
 
+
 class Table:
 
 	def __init__(self, name):
@@ -91,6 +92,7 @@ class Table:
 
 		return self.rows
 
+
 class Row:
 
 	def __init__(self, table):
@@ -117,6 +119,7 @@ class Row:
 
 		return [cell.get_value() for cell in self.cells]
 
+
 class Column:
 
 	def __init__(self, table, name):
@@ -141,6 +144,7 @@ class Column:
 	def get_name(self):
 
 		return self.name
+
 
 class Cell:
 

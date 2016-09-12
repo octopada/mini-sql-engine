@@ -18,6 +18,7 @@ class Loader:
 
 		return cls.database
 
+
 	@classmethod
 	def initialize_database(cls):
 
@@ -52,6 +53,7 @@ class Loader:
 			if re.match('<begin_table>.*', line): # check for begin_table
 
 				line_is_table = True
+
 
 	@classmethod
 	def populate_database(cls):
