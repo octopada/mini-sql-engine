@@ -4,21 +4,20 @@ from database import Database
 class Loader:
 
 	METADATA_FILE_NAME = 'metadata.txt'
-	initialized = False
-	table_name = ''
-	column_names = []
+	already_initialized = False
 	database = Database()
 
 	@classmethod
 	def get_database(cls):
 
-		if not cls.initialized:
+		if not cls.already_initialized:
 
 			cls.initialize_database()
 			cls.populate_database()
-			cls.initialized = True
+			cls.already_initialized = True
 
 		return cls.database
+
 
 	@classmethod
 	def initialize_database(cls):
@@ -36,8 +35,6 @@ class Loader:
 				if re.match('<end_table>.*', line):
 
 					cls.database.create_table(cls.table_name, cls.column_names)
-					cls.table_name = ''
-					cls.column_names = []
 					line_is_column = False
 
 				else:
@@ -48,13 +45,15 @@ class Loader:
 			if line_is_table:
 
 				cls.table_name = line.strip()
-
 				line_is_table = False
+
 				line_is_column = True
+				cls.column_names = []
 
 			if re.match('<begin_table>.*', line): # check for begin_table
 
 				line_is_table = True
+
 
 	@classmethod
 	def populate_database(cls):
